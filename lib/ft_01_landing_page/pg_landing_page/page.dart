@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_attendance_app/pages.dart';
+
+import '../../component/component.dart';
 
 class FAALandingPage extends StatelessWidget {
   const FAALandingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFFDCEDC8),
-      body: _LandingPage(),
-    );
+    return MediaQuery.of(context).size.width < 360 ||
+            MediaQuery.of(context).size.height < 640
+        ? const NotSupportedBackground()
+        : const StandardBackground(
+            child: _LandingPage(),
+          );
   }
 }
 
@@ -24,7 +29,9 @@ class _LandingPage extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () => context.router.replace(
+              const FAAMainRoute(),
+            ),
           ),
         ),
       ],
@@ -43,6 +50,7 @@ class _LandingPageText extends StatelessWidget {
         children: [
           const Text(
             'ATTENDANCE APPLICATION',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
@@ -52,6 +60,7 @@ class _LandingPageText extends StatelessWidget {
           SizedBox(height: MediaQuery.of(context).size.height * 0.2),
           const Text(
             'Tap to continue',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w300,
