@@ -40,6 +40,12 @@ class AppRouter extends _i2.RootStackRouter {
         child: const _i1.FAATutorialPage(),
       );
     },
+    FAAAddAttendanceRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i1.FAAAddAttendancePage(),
+      );
+    },
   };
 
   @override
@@ -55,6 +61,10 @@ class AppRouter extends _i2.RootStackRouter {
         _i2.RouteConfig(
           FAATutorialRoute.name,
           path: '/f-aa-tutorial-page',
+        ),
+        _i2.RouteConfig(
+          FAAAddAttendanceRoute.name,
+          path: '/f-aa-add-attendance-page',
         ),
       ];
 }
@@ -93,4 +103,16 @@ class FAATutorialRoute extends _i2.PageRouteInfo<void> {
         );
 
   static const String name = 'FAATutorialRoute';
+}
+
+/// generated route for
+/// [_i1.FAAAddAttendancePage]
+class FAAAddAttendanceRoute extends _i2.PageRouteInfo<void> {
+  const FAAAddAttendanceRoute()
+      : super(
+          FAAAddAttendanceRoute.name,
+          path: '/f-aa-add-attendance-page',
+        );
+
+  static const String name = 'FAAAddAttendanceRoute';
 }

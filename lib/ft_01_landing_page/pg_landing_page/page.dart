@@ -30,7 +30,7 @@ class _LandingPage extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: GestureDetector(
             onTap: () => context.router.replace(
-              const FAAMainRoute(),
+              const FAATutorialRoute(),
             ),
           ),
         ),

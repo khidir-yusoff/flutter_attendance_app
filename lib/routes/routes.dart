@@ -17,6 +17,9 @@ export 'routes.gr.dart';
     AutoRoute(
       page: FAATutorialPage,
     ),
+    AutoRoute(
+      page: FAAAddAttendancePage,
+    ),
   ],
 )
 class $AppRouter {}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_attendance_app/pages.dart';
 
-import '../../component/background.dart';
+import '../../component/component.dart';
 import '../../platform.dart';
 
 class FAAMainPage extends StatelessWidget {
@@ -25,7 +26,20 @@ class FAAMainPage extends StatelessWidget {
         ? const NotSupportedBackground()
         : StandardBackground(
             child: Center(
-              child: Text('Running on $platform!'),
+              child: Column(
+                children: [
+                  Text('Running on $platform!'),
+                  SizedBox(
+                    width: 120,
+                    child: StandardButton(
+                      buttonText: 'Add Attendance',
+                      onPressed: () => context.router.replace(
+                        const FAAAddAttendanceRoute(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
   }
