@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_attendance_app/pages.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 //import 'package:flutter_attendance_app/pages.dart';
 
 import '../../component/component.dart';
@@ -40,14 +41,45 @@ class _AddAttendancePage extends StatelessWidget {
     return Center(
       child: CardBackground(
         onMobile: onMobile,
-        child: onMobile
-            ? _MobileLayout(
-                onMobile: onMobile,
-              )
-            : _ExpandLayout(
-                onMobile: onMobile,
-              ),
+        child: _Layout(onMobile: onMobile),
       ),
+    );
+  }
+}
+
+class _Layout extends StatelessWidget {
+  const _Layout({
+    Key? key,
+    required this.onMobile,
+  }) : super(key: key);
+
+  final bool onMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          'ADD ATTENDANCE',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF00796B),
+          ),
+        ),
+        const SizedBox(height: 30),
+        _TitleField(
+          onMobile: onMobile,
+        ),
+        const SizedBox(height: 50),
+        _DateTimeField(
+          onMobile: onMobile,
+        ),
+        const SizedBox(height: 30),
+        _BottomButton(onMobile: onMobile),
+      ],
     );
   }
 }
@@ -135,27 +167,39 @@ class _DateTimeField extends StatefulWidget {
 }
 
 class _DateTimeFieldState extends State<_DateTimeField> {
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: widget.onMobile ? 200 : 260,
-          height: 50,
-          child: const TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Date and Time',
+    return Consumer<FAAAddAttendancePageState>(
+      builder: (_, state, __) {
+        _controller.text = state.dateTime == null
+            ? ''
+            : DateFormat('dd MMM yyyy, h:mm a').format(state.dateTime!);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: widget.onMobile ? 200 : 260,
+              height: 50,
+              child: TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Date and Time',
+                  enabled: false,
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        _DateTimeButton(
-          onMobile: widget.onMobile,
-        ),
-      ],
+            const SizedBox(height: 5),
+            _DateTimeButton(
+              onMobile: widget.onMobile,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -179,14 +223,14 @@ class _DateTimeButtonState extends State<_DateTimeButton> {
       builder: (_, state, __) {
         Future<DateTime?> pickDate() => showDatePicker(
               context: context,
-              initialDate: state.selectedDate,
+              initialDate: DateTime.now(),
               firstDate: DateTime(1900),
               lastDate: DateTime(2100),
             );
 
         Future<TimeOfDay?> pickTime() => showTimePicker(
               context: context,
-              initialTime: state.selectedTime,
+              initialTime: TimeOfDay.now(),
             );
 
         Future pickDateTime() async {
@@ -257,17 +301,29 @@ class _TitleField extends StatefulWidget {
 }
 
 class _TitleFieldState extends State<_TitleField> {
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.onMobile ? 200 : 260,
-      height: 50,
-      child: const TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Title',
-        ),
-      ),
+    return Consumer<FAAAddAttendancePageState>(
+      builder: (_, state, __) {
+        if (state.updateTextController) {
+          _controller.text = state.title!;
+        }
+
+        return SizedBox(
+          width: widget.onMobile ? 200 : 260,
+          height: 50,
+          child: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Title',
+            ),
+            onChanged: (value) => state.title = value,
+          ),
+        );
+      },
     );
   }
 }

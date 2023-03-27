@@ -1,47 +1,28 @@
 import 'package:flutter/material.dart';
 
 class FAAAddAttendancePageState extends ChangeNotifier {
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
-  DateTime _dateTime = DateTime.now();
+  String? _title;
+  DateTime? _dateTime;
 
-  bool _showDate = false;
-  bool _showTime = false;
-  bool _showDateTime = false;
-
-  DateTime get selectedDate => _selectedDate;
-  set selectedDate(DateTime selectedDate) {
-    _selectedDate = selectedDate;
+  String? get title => _title;
+  set title(String? title) {
+    _title = title;
     notifyListeners();
   }
 
-  TimeOfDay get selectedTime => _selectedTime;
-  set selectedTime(TimeOfDay selectedTime) {
-    _selectedTime = selectedTime;
-    notifyListeners();
-  }
-
-  DateTime get dateTime => _dateTime;
-  set dateTime(DateTime dateTime) {
+  DateTime? get dateTime => _dateTime;
+  set dateTime(DateTime? dateTime) {
     _dateTime = dateTime;
     notifyListeners();
   }
 
-  bool get showDate => _showDate;
-  set showDate(bool showDate) {
-    _showDate = showDate;
-    notifyListeners();
-  }
+  bool _updateTextController = false;
 
-  bool get showTime => _showTime;
-  set showTime(bool showTime) {
-    _showTime = showTime;
-    notifyListeners();
-  }
+  bool get updateTextController => _updateTextController;
 
-  bool get showDateTime => _showDateTime;
-  set showDateTime(bool showDateTime) {
-    _showDateTime = showDateTime;
-    notifyListeners();
+  @protected
+  void updateText(void Function() update) {
+    update();
+    _updateTextController = true;
   }
 }
