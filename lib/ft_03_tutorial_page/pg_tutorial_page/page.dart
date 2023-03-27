@@ -32,6 +32,8 @@ class _TutorialPage extends StatelessWidget {
           SizedBox(
             width: 120,
             child: StandardButton(
+              height: 40,
+              width: 75,
               buttonText: 'I understand!',
               onPressed: () => context.router.replace(
                 const FAAMainRoute(),

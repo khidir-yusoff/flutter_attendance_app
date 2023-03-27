@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_attendance_app/pages.dart';
 import 'package:provider/provider.dart';
 //import 'package:flutter_attendance_app/pages.dart';
 
@@ -65,6 +66,15 @@ class _MobileLayout extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        const Text(
+          'ADD ATTENDANCE',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF00796B),
+          ),
+        ),
+        const SizedBox(height: 30),
         _TitleField(
           onMobile: onMobile,
         ),
@@ -72,6 +82,8 @@ class _MobileLayout extends StatelessWidget {
         _DateTimeField(
           onMobile: onMobile,
         ),
+        const SizedBox(height: 30),
+        _BottomButton(onMobile: onMobile),
       ],
     );
   }
@@ -91,9 +103,20 @@ class _ExpandLayout extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        const Text(
+          'ADD ATTENDANCE',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF00796B),
+          ),
+        ),
+        const SizedBox(height: 30),
         _TitleField(onMobile: onMobile),
         const SizedBox(height: 50),
         _DateTimeField(onMobile: onMobile),
+        const SizedBox(height: 30),
+        _BottomButton(onMobile: onMobile),
       ],
     );
   }
@@ -245,6 +268,52 @@ class _TitleFieldState extends State<_TitleField> {
           hintText: 'Title',
         ),
       ),
+    );
+  }
+}
+
+class _BottomButton extends StatelessWidget {
+  const _BottomButton({Key? key, required this.onMobile}) : super(key: key);
+
+  final bool onMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: onMobile ? 200 : 260,
+      child: onMobile
+          ? Column(
+              children: [
+                StandardButton(
+                  height: 40,
+                  width: onMobile ? 200 : 100,
+                  buttonText: 'Submit',
+                  onPressed: () {},
+                ),
+                const SizedBox(height: 10),
+                ReturnButton(
+                  height: 40,
+                  width: onMobile ? 200 : 100,
+                  buttonText: 'Back',
+                ),
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                StandardButton(
+                  height: 40,
+                  width: onMobile ? 200 : 100,
+                  buttonText: 'Submit',
+                  onPressed: () {},
+                ),
+                ReturnButton(
+                  height: 40,
+                  width: onMobile ? 200 : 100,
+                  buttonText: 'Back',
+                ),
+              ],
+            ),
     );
   }
 }

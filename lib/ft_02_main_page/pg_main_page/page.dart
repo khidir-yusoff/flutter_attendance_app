@@ -27,13 +27,16 @@ class FAAMainPage extends StatelessWidget {
         : StandardBackground(
             child: Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Running on $platform!'),
                   SizedBox(
                     width: 120,
                     child: StandardButton(
+                      height: 40,
+                      width: 75,
                       buttonText: 'Add Attendance',
-                      onPressed: () => context.router.replace(
+                      onPressed: () => context.router.push(
                         const FAAAddAttendanceRoute(),
                       ),
                     ),
