@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-//import 'package:flutter_attendance_app/pages.dart';
-
 import '../../component/component.dart';
 import '../../platform.dart';
 import 'state.dart';
@@ -77,76 +75,6 @@ class _Layout extends StatelessWidget {
         _DateTimeField(
           onMobile: onMobile,
         ),
-        const SizedBox(height: 30),
-        _BottomButton(onMobile: onMobile),
-      ],
-    );
-  }
-}
-
-class _MobileLayout extends StatelessWidget {
-  const _MobileLayout({
-    Key? key,
-    required this.onMobile,
-  }) : super(key: key);
-
-  final bool onMobile;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          'ADD ATTENDANCE',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF00796B),
-          ),
-        ),
-        const SizedBox(height: 30),
-        _TitleField(
-          onMobile: onMobile,
-        ),
-        const SizedBox(height: 50),
-        _DateTimeField(
-          onMobile: onMobile,
-        ),
-        const SizedBox(height: 30),
-        _BottomButton(onMobile: onMobile),
-      ],
-    );
-  }
-}
-
-class _ExpandLayout extends StatelessWidget {
-  const _ExpandLayout({
-    Key? key,
-    required this.onMobile,
-  }) : super(key: key);
-
-  final bool onMobile;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          'ADD ATTENDANCE',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF00796B),
-          ),
-        ),
-        const SizedBox(height: 30),
-        _TitleField(onMobile: onMobile),
-        const SizedBox(height: 50),
-        _DateTimeField(onMobile: onMobile),
         const SizedBox(height: 30),
         _BottomButton(onMobile: onMobile),
       ],
