@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
 class FAAAddAttendancePageState extends ChangeNotifier {
-  String? _title;
+  String? _name;
+  String? _phone;
   DateTime? _dateTime;
 
-  String? get title => _title;
-  set title(String? title) {
-    _title = title;
+  String? get name => _name;
+  set name(String? name) {
+    _name = name;
+    notifyListeners();
+  }
+
+  String? get phone => _phone;
+  set phone(String? phone) {
+    _phone = phone;
     notifyListeners();
   }
 

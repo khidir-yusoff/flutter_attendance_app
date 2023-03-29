@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_attendance_app/pages.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../component/component.dart';
 
@@ -17,8 +18,29 @@ class FAALandingPage extends StatelessWidget {
   }
 }
 
-class _LandingPage extends StatelessWidget {
+class _LandingPage extends StatefulWidget {
   const _LandingPage({Key? key}) : super(key: key);
+
+  @override
+  State<_LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<_LandingPage> {
+  bool tutorialCheck = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getTutorial();
+  }
+
+  Future<void> _getTutorial() async {
+    final tutorial = await SharedPreferences.getInstance();
+
+    setState(() {
+      tutorialCheck = tutorial.getBool('unTutorial')!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +51,17 @@ class _LandingPage extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: GestureDetector(
-            onTap: () => context.router.replace(
-              const FAATutorialRoute(),
-            ),
+            onTap: () {
+              if (tutorialCheck) {
+                context.router.replace(
+                  const FAAMainRoute(),
+                );
+              } else {
+                context.router.replace(
+                  const FAATutorialRoute(),
+                );
+              }
+            },
           ),
         ),
       ],

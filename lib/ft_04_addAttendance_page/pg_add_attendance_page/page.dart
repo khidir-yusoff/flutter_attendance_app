@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/component.dart';
 import '../../platform.dart';
+import 'dialog.dart';
 import 'state.dart';
+
+final _nameController = TextEditingController();
+final _phoneController = TextEditingController();
+final _dateController = TextEditingController();
 
 class FAAAddAttendancePage extends StatelessWidget {
   const FAAAddAttendancePage({Key? key}) : super(key: key);
@@ -68,10 +75,14 @@ class _Layout extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 30),
-        _TitleField(
+        _NameField(
           onMobile: onMobile,
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
+        _PhoneField(
+          onMobile: onMobile,
+        ),
+        const SizedBox(height: 20),
         _DateTimeField(
           onMobile: onMobile,
         ),
@@ -95,13 +106,11 @@ class _DateTimeField extends StatefulWidget {
 }
 
 class _DateTimeFieldState extends State<_DateTimeField> {
-  final _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Consumer<FAAAddAttendancePageState>(
       builder: (_, state, __) {
-        _controller.text = state.dateTime == null
+        _dateController.text = state.dateTime == null
             ? ''
             : DateFormat('dd MMM yyyy, h:mm a').format(state.dateTime!);
 
@@ -113,7 +122,7 @@ class _DateTimeFieldState extends State<_DateTimeField> {
               width: widget.onMobile ? 200 : 260,
               height: 50,
               child: TextField(
-                controller: _controller,
+                controller: _dateController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Date and Time',
@@ -216,8 +225,8 @@ class _DateTimeButtonState extends State<_DateTimeButton> {
   }
 }
 
-class _TitleField extends StatefulWidget {
-  const _TitleField({
+class _NameField extends StatefulWidget {
+  const _NameField({
     Key? key,
     required this.onMobile,
   }) : super(key: key);
@@ -225,30 +234,68 @@ class _TitleField extends StatefulWidget {
   final bool onMobile;
 
   @override
-  State<_TitleField> createState() => _TitleFieldState();
+  State<_NameField> createState() => _NameFieldState();
 }
 
-class _TitleFieldState extends State<_TitleField> {
-  final _controller = TextEditingController();
-
+class _NameFieldState extends State<_NameField> {
   @override
   Widget build(BuildContext context) {
     return Consumer<FAAAddAttendancePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.title!;
+          _nameController.text = state.name!;
         }
 
         return SizedBox(
           width: widget.onMobile ? 200 : 260,
           height: 50,
           child: TextField(
-            controller: _controller,
+            controller: _nameController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'Title',
+              hintText: 'Name',
             ),
-            onChanged: (value) => state.title = value,
+            onChanged: (value) => state.name = value,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PhoneField extends StatefulWidget {
+  const _PhoneField({
+    Key? key,
+    required this.onMobile,
+  }) : super(key: key);
+
+  final bool onMobile;
+
+  @override
+  State<_PhoneField> createState() => _PhoneFieldState();
+}
+
+class _PhoneFieldState extends State<_PhoneField> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<FAAAddAttendancePageState>(
+      builder: (_, state, __) {
+        if (state.updateTextController) {
+          _phoneController.text = state.phone!.toString();
+        }
+
+        return SizedBox(
+          width: widget.onMobile ? 200 : 260,
+          height: 50,
+          child: TextField(
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.phone,
+            controller: _phoneController,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Phone Number',
+            ),
+            onChanged: (value) => state.phone = value,
           ),
         );
       },
@@ -257,47 +304,74 @@ class _TitleFieldState extends State<_TitleField> {
 }
 
 class _BottomButton extends StatelessWidget {
-  const _BottomButton({Key? key, required this.onMobile}) : super(key: key);
+  const _BottomButton({
+    Key? key,
+    required this.onMobile,
+  }) : super(key: key);
 
   final bool onMobile;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: onMobile ? 200 : 260,
-      child: onMobile
-          ? Column(
-              children: [
-                StandardButton(
-                  height: 40,
-                  width: onMobile ? 200 : 100,
-                  buttonText: 'Submit',
-                  onPressed: () {},
+    return Consumer<FAAAddAttendancePageState>(
+      builder: (_, state, __) {
+        final attendanceRecord = Hive.box('attendance_record');
+        List<Widget> buttons = [
+          StandardButton(
+            height: 40,
+            width: onMobile ? 200 : 100,
+            buttonText: 'Submit',
+            onPressed: () => {
+              if (state.name == null ||
+                  state.phone == null ||
+                  state.dateTime == null)
+                {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) =>
+                        const SubmitDialog(dialogType: 2),
+                  )
+                }
+              else
+                {
+                  attendanceRecord.add(
+                    {
+                      "name": state.name,
+                      "phone": state.phone,
+                      "time": state.dateTime,
+                    },
+                  ),
+                  _nameController.clear(),
+                  _phoneController.clear(),
+                  _dateController.clear(),
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) =>
+                        const SubmitDialog(dialogType: 1),
+                  ),
+                },
+            },
+          ),
+          const SizedBox(height: 10),
+          ReturnButton(
+            height: 40,
+            width: onMobile ? 200 : 100,
+            buttonText: 'Back',
+          ),
+        ];
+
+        return SizedBox(
+          width: onMobile ? 200 : 260,
+          child: onMobile
+              ? Column(children: buttons)
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: buttons,
                 ),
-                const SizedBox(height: 10),
-                ReturnButton(
-                  height: 40,
-                  width: onMobile ? 200 : 100,
-                  buttonText: 'Back',
-                ),
-              ],
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                StandardButton(
-                  height: 40,
-                  width: onMobile ? 200 : 100,
-                  buttonText: 'Submit',
-                  onPressed: () {},
-                ),
-                ReturnButton(
-                  height: 40,
-                  width: onMobile ? 200 : 100,
-                  buttonText: 'Back',
-                ),
-              ],
-            ),
+        );
+      },
     );
   }
 }
