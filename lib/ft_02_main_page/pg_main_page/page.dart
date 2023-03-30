@@ -70,7 +70,7 @@ class _TimeFormatButton extends StatefulWidget {
 }
 
 class _TimeFormatButtonState extends State<_TimeFormatButton> {
-  int? format;
+  int format = 0;
 
   @override
   void initState() {
@@ -103,7 +103,7 @@ class _TimeFormatButtonState extends State<_TimeFormatButton> {
                   MaterialStatePropertyAll<Color>(Color(0XFF4CAF50)),
             ),
             onPressed: () {
-              state.timeFormat = format!;
+              state.timeFormat = format;
               if (state.timeFormat == 0) {
                 format = 1;
                 state.timeFormat = 1;

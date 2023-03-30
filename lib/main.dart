@@ -9,7 +9,6 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   box = await Hive.openBox('attendance_record');
-  //box.deleteFromDisk();
   Hive.registerAdapter(AttendanceRecordAdapter());
   runApp(MyApp());
 }
